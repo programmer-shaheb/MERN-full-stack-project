@@ -5,7 +5,7 @@ import useStyles from "./Style";
 import FileBase from "react-file-base64";
 import { createPost, updatePost } from "../../actions/posts";
 
-function Form({ currentID, setCurrentID }) {
+const Form = ({ currentID, setCurrentID, handleClickVariant }) => {
   const classes = useStyles();
   const [postData, setPostData] = useState({
     creator: "",
@@ -109,6 +109,7 @@ function Form({ currentID, setCurrentID }) {
           color="primary"
           size="large"
           fullWidth
+          onClick={handleClickVariant("success")}
         >
           Submit
         </Button>
@@ -124,6 +125,6 @@ function Form({ currentID, setCurrentID }) {
       </form>
     </Paper>
   );
-}
+};
 
 export default Form;
