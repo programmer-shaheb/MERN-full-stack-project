@@ -15,17 +15,38 @@ import Input from "./Input";
 import { GoogleLogin } from "react-google-login";
 import Icon from "./icon";
 import { useHistory } from "react-router-dom";
+import { signup, signin } from "../../actions/auth";
+
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 const Auth = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [formData, setFormData] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
 
-  const handleSubmit = () => {};
-  const handleChange = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isSignUp) {
+      dispatch(signup(formData, history));
+    } else {
+      dispatch(signin(formData, history));
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   const googleSuccess = async (res) => {
     const result = res?.profileObj;
     const token = res?.tokenId;
