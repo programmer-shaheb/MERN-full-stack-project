@@ -7,8 +7,9 @@ import { createPost, updatePost } from "../../actions/posts";
 
 const Form = ({ currentID, setCurrentID, handleClickVariant }) => {
   const classes = useStyles();
+  const user = JSON.parse(localStorage.getItem("profile"));
+
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
@@ -27,22 +28,33 @@ const Form = ({ currentID, setCurrentID, handleClickVariant }) => {
     e.preventDefault();
 
     if (currentID) {
-      dispatch(updatePost(currentID, postData));
+      dispatch(
+        updatePost(currentID, { ...postData, name: user?.result?.name })
+      );
     } else {
-      dispatch(createPost(postData));
+      dispatch(createPost({ ...postData, name: user?.result?.name }));
     }
     clear();
   };
   const clear = () => {
     setCurrentID(null);
     setPostData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
       selectedFile: "",
     });
   };
+
+  if (!user?.result?.name) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h6" align="center">
+          Please Sign In To Create Your Photo Memory.
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -55,16 +67,6 @@ const Form = ({ currentID, setCurrentID, handleClickVariant }) => {
         <Typography variant="h6">
           {currentID ? `Updating` : `Creating`} A Memory
         </Typography>
-        <TextField
-          fullWidth
-          name="creator"
-          label="Creator"
-          variant="outlined"
-          value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          }
-        />
         <TextField
           fullWidth
           name="title"
