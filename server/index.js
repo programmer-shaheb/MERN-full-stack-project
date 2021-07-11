@@ -14,6 +14,9 @@ app.use(cors());
 
 app.use("/posts", postRoutes);
 app.use("/auth", authRoutes);
+app.get("/", (req, res) => {
+  res.send("hldksfjdf");
+});
 
 const PORT = process.env.PORT || 5000;
 
