@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Typography, Toolbar, Avatar, Button } from "@material-ui/core";
+import {
+  AppBar,
+  Typography,
+  Toolbar,
+  Avatar,
+  Button,
+  Box,
+} from "@material-ui/core";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import useStyles from "./Style";
@@ -31,23 +38,14 @@ const Navbar = () => {
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
-      <div className={classes.brandContainer}>
-        <Typography
-          component={Link}
-          to="/"
-          className={classes.heading}
-          variant="h2"
-          align="center"
-        >
-          Photography
-        </Typography>
+      <Box component={Link} to="/" className={classes.brandContainer}>
         <img
-          className={classes.image}
           src="https://photography.modeltheme.com/wp-content/themes/mtphotography/images/mtphotography_logo.png"
           alt="photography"
-          height="60"
+          className={classes.image}
         />
-      </div>
+      </Box>
+
       <Toolbar className={classes.toolbar}>
         {user ? (
           <div className={classes.profile}>

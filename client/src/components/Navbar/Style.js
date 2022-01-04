@@ -10,6 +10,9 @@ export default makeStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "10px 50px",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+    },
   },
   heading: {
     color: "rgba(0,183,255, 1)",
@@ -17,20 +20,39 @@ export default makeStyles((theme) => ({
   },
   image: {
     marginLeft: "15px",
+    width: "50%",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      height: "auto",
+      marginLeft: 0,
+    },
   },
   toolbar: {
     display: "flex",
     justifyContent: "flex-end",
     width: "400px",
+    [theme.breakpoints.down("sm")]: {
+      width: "auto",
+    },
   },
   profile: {
     display: "flex",
     justifyContent: "space-between",
     width: "400px",
+    alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
+      width: "auto",
+      marginTop: 20,
+      justifyContent: "center",
+    },
+  },
+  logout: {
+    marginLeft: "20px",
   },
   userName: {
     display: "flex",
     alignItems: "center",
+    textAlign: "center",
   },
   brandContainer: {
     display: "flex",

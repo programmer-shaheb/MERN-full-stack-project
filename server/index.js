@@ -14,6 +14,7 @@ app.use(cors());
 
 app.use("/posts", postRoutes);
 app.use("/auth", authRoutes);
+
 app.get("/", (req, res) => {
   res.send("This is a testing link");
 });

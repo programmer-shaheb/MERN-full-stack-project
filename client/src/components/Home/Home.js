@@ -9,34 +9,36 @@ import {
   Paper,
 } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { useSnackbar } from "notistack";
+
 import Form from "../../components/Form/Form";
 import Posts from "../../components/Posts/Posts";
 import { useDispatch } from "react-redux";
-import { getPosts, getPostsBySearch } from "../../actions/posts";
+import { getPostsBySearch } from "../../actions/posts";
 import Pagination from "../Pagination";
 import useStyles from "./styles";
 import ChipInput from "material-ui-chip-input";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const Home = () => {
   const classes = useStyles();
   const query = useQuery();
+  const [currentID, setCurrentID] = useState(0);
+  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+  const [tags, setTags] = useState([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const history = useHistory();
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
-  const { enqueueSnackbar } = useSnackbar();
-  const [currentID, setCurrentID] = useState(null);
-  const dispatch = useDispatch();
-  const [search, setSearch] = useState("");
-  const [tags, setTags] = useState([]);
-  const history = useHistory();
-
-  const handleClickVariant = (variant) => () => {
-    enqueueSnackbar("Successfully Submitted!", { variant });
-  };
 
   const searchPost = () => {
     if (search.trim() || tags) {
@@ -59,6 +61,18 @@ const Home = () => {
   };
   const handleDeleteChip = (chipToDelete) => {
     setTags(tags.filter((tag) => tag !== chipToDelete));
+  };
+
+  const handleSnackbarOpen = () => {
+    setOpenSnackbar(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
   };
 
   return (
@@ -110,13 +124,24 @@ const Home = () => {
             <Form
               currentID={currentID}
               setCurrentID={setCurrentID}
-              handleClickVariant={handleClickVariant}
+              open={handleSnackbarOpen}
             />
-            <Paper elevation={6} className={classes.pagination}>
-              <Pagination page={page} />
-            </Paper>
+            {!searchQuery && !tags.length && (
+              <Paper elevation={6} className={classes.pagination}>
+                <Pagination page={page} />
+              </Paper>
+            )}
           </Grid>
         </Grid>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert onClose={handleClose} severity="success">
+            Post Created Successfully!
+          </Alert>
+        </Snackbar>
       </Container>
     </Grow>
   );

@@ -1,49 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Typography, Paper, TextField } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./Style";
 import FileBase from "react-file-base64";
 import { createPost, updatePost } from "../../actions/posts";
+import ChipInput from "material-ui-chip-input";
+import { useHistory } from "react-router-dom";
 
-const Form = ({ currentID, setCurrentID, handleClickVariant }) => {
-  const classes = useStyles();
-  const user = JSON.parse(localStorage.getItem("profile"));
-
+const Form = ({ currentID, setCurrentID, open }) => {
   const [postData, setPostData] = useState({
     title: "",
     message: "",
     tags: "",
     selectedFile: "",
   });
+  const classes = useStyles();
   const post = useSelector((state) =>
-    currentID ? state.posts.find((p) => p._id === currentID) : null
+    currentID ? state.posts?.posts?.find((p) => p._id === currentID) : null
   );
-
-  useEffect(() => {
-    if (post) setPostData(post);
-  }, [post]);
-
   const dispatch = useDispatch();
-  const handleForm = (e) => {
-    e.preventDefault();
+  const history = useHistory();
 
-    if (currentID) {
-      dispatch(
-        updatePost(currentID, { ...postData, name: user?.result?.name })
-      );
-    } else {
-      dispatch(createPost({ ...postData, name: user?.result?.name }));
-    }
-    clear();
-  };
+  const user = JSON.parse(localStorage.getItem("profile"));
+
   const clear = () => {
-    setCurrentID(null);
+    setCurrentID(0);
     setPostData({
       title: "",
       message: "",
-      tags: "",
+      tags: [],
       selectedFile: "",
     });
+  };
+
+  useEffect(() => {
+    if (!post?.title) clear();
+    if (post) setPostData(post);
+  }, [post]);
+
+  const handleForm = async (e) => {
+    e.preventDefault();
+
+    if (currentID === 0) {
+      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      clear();
+    } else {
+      dispatch(
+        updatePost(currentID, { ...postData, name: user?.result?.name })
+      );
+      clear();
+    }
   };
 
   if (!user?.result?.name) {
@@ -56,8 +62,19 @@ const Form = ({ currentID, setCurrentID, handleClickVariant }) => {
     );
   }
 
+  const handleAddChip = (tag) => {
+    setPostData({ ...postData, tags: [...postData.tags, tag] });
+  };
+
+  const handleDeleteChip = (chipToDelete) => {
+    setPostData({
+      ...postData,
+      tags: postData.tags.filter((tag) => tag !== chipToDelete),
+    });
+  };
+
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.paper} elevation={6}>
       <form
         onSubmit={handleForm}
         className={`${classes.root} ${classes.form}`}
@@ -85,16 +102,17 @@ const Form = ({ currentID, setCurrentID, handleClickVariant }) => {
             setPostData({ ...postData, message: e.target.value })
           }
         />
-        <TextField
-          fullWidth
-          name="tags"
-          label="Tags (coma separated) "
-          variant="outlined"
-          value={postData.tags}
-          onChange={(e) =>
-            setPostData({ ...postData, tags: e.target.value.split(",") })
-          }
-        />
+        <div style={{ padding: "5px 0", width: "94%" }}>
+          <ChipInput
+            name="tags"
+            variant="outlined"
+            label="Tags"
+            fullWidth
+            value={postData.tags}
+            onAdd={(chip) => handleAddChip(chip)}
+            onDelete={(chip) => handleDeleteChip(chip)}
+          />
+        </div>
         <div className={classes.fileInput}>
           <FileBase
             type="file"
@@ -111,7 +129,7 @@ const Form = ({ currentID, setCurrentID, handleClickVariant }) => {
           color="primary"
           size="large"
           fullWidth
-          onClick={handleClickVariant("success")}
+          onClick={open}
         >
           Submit
         </Button>
