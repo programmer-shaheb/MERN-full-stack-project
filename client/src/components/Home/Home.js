@@ -17,15 +17,9 @@ import { getPostsBySearch } from "../../actions/posts";
 import Pagination from "../Pagination";
 import useStyles from "./styles";
 import ChipInput from "material-ui-chip-input";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
-}
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const Home = () => {
@@ -35,7 +29,6 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
   const [tags, setTags] = useState([]);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const history = useHistory();
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
@@ -61,18 +54,6 @@ const Home = () => {
   };
   const handleDeleteChip = (chipToDelete) => {
     setTags(tags.filter((tag) => tag !== chipToDelete));
-  };
-
-  const handleSnackbarOpen = () => {
-    setOpenSnackbar(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSnackbar(false);
   };
 
   return (
@@ -121,11 +102,7 @@ const Home = () => {
               </Button>
             </AppBar>
 
-            <Form
-              currentID={currentID}
-              setCurrentID={setCurrentID}
-              open={handleSnackbarOpen}
-            />
+            <Form currentID={currentID} setCurrentID={setCurrentID} />
             {!searchQuery && !tags.length && (
               <Paper elevation={6} className={classes.pagination}>
                 <Pagination page={page} />
@@ -133,15 +110,6 @@ const Home = () => {
             )}
           </Grid>
         </Grid>
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={6000}
-          onClose={handleClose}
-        >
-          <Alert onClose={handleClose} severity="success">
-            Post Created Successfully!
-          </Alert>
-        </Snackbar>
       </Container>
     </Grow>
   );

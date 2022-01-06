@@ -16,7 +16,7 @@ app.use("/posts", postRoutes);
 app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
-  res.send("This is a testing link");
+  res.send("This is a akash");
 });
 
 const PORT = process.env.PORT || 5000;

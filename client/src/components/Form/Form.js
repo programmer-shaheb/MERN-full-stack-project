@@ -7,7 +7,7 @@ import { createPost, updatePost } from "../../actions/posts";
 import ChipInput from "material-ui-chip-input";
 import { useHistory } from "react-router-dom";
 
-const Form = ({ currentID, setCurrentID, open }) => {
+const Form = ({ currentID, setCurrentID }) => {
   const [postData, setPostData] = useState({
     title: "",
     message: "",
@@ -132,7 +132,6 @@ const Form = ({ currentID, setCurrentID, open }) => {
           color="primary"
           size="large"
           fullWidth
-          onClick={open}
         >
           Submit
         </Button>
