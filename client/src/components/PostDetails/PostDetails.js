@@ -11,6 +11,7 @@ import { useParams, useHistory } from "react-router-dom";
 
 import { getPost, getPostsBySearch } from "../../actions/posts";
 import useStyles from "./styles";
+import CommentSection from "./CommentSection";
 
 const PostDetails = () => {
   const { post, posts, isLoading } = useSelector((state) => state.posts);
@@ -21,7 +22,7 @@ const PostDetails = () => {
 
   useEffect(() => {
     dispatch(getPost(id));
-  }, [id]);
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (post) {
@@ -29,7 +30,7 @@ const PostDetails = () => {
         getPostsBySearch({ search: "none", tags: post?.tags.join(",") })
       );
     }
-  }, [post]);
+  }, [dispatch, post]);
 
   if (!post) return null;
 
@@ -73,7 +74,7 @@ const PostDetails = () => {
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
           <Typography variant="body1">
-            <strong>Comments - coming soon!</strong>
+            <CommentSection post={post} />
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
         </div>

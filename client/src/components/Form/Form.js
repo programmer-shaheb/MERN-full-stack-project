@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button, Typography, Paper, TextField } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./Style";
@@ -23,7 +23,7 @@ const Form = ({ currentID, setCurrentID, open }) => {
 
   const user = JSON.parse(localStorage.getItem("profile"));
 
-  const clear = () => {
+  const clear = useCallback(() => {
     setCurrentID(0);
     setPostData({
       title: "",
@@ -31,12 +31,13 @@ const Form = ({ currentID, setCurrentID, open }) => {
       tags: [],
       selectedFile: "",
     });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!post?.title) clear();
     if (post) setPostData(post);
-  }, [post]);
+  }, [clear, post]);
 
   const handleForm = async (e) => {
     e.preventDefault();
@@ -94,6 +95,8 @@ const Form = ({ currentID, setCurrentID, open }) => {
         />
         <TextField
           fullWidth
+          multiline
+          rows={4}
           name="message"
           label="Message"
           variant="outlined"
