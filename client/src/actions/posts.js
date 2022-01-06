@@ -32,7 +32,7 @@ export const getPosts = (page) => async (dispatch) => {
     const {
       data: { data, currentPage, numberOfPages },
     } = await api.fetchPosts(page);
-
+    console.log(data);
     dispatch({
       type: FETCH_ALL,
       payload: { data, currentPage, numberOfPages },
