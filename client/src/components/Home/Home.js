@@ -9,7 +9,6 @@ import {
   Paper,
 } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-
 import Form from "../../components/Form/Form";
 import Posts from "../../components/Posts/Posts";
 import { useDispatch } from "react-redux";

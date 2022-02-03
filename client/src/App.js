@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { CircularProgress, Container } from "@material-ui/core";
+import { Container, LinearProgress } from "@material-ui/core";
 import Navbar from "./components/Navbar/Navbar";
 
 import {
@@ -20,7 +20,7 @@ const App = () => {
     <Router>
       <Container maxWidth="xl">
         <Navbar />
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<LinearProgress />}>
           <Switch>
             <Route path="/" exact component={() => <Redirect to="/posts" />} />
             <Route path="/posts" exact component={Home} />

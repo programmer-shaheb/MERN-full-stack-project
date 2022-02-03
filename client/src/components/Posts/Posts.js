@@ -7,7 +7,6 @@ import { Grid, LinearProgress } from "@material-ui/core";
 const Posts = ({ setCurrentID }) => {
   const { posts, isLoading } = useSelector((state) => state.posts);
   const classes = useStyles();
-
   if (!posts.length && !isLoading) return "No Posts";
 
   return isLoading ? (

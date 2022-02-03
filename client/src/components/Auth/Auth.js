@@ -16,6 +16,7 @@ import { GoogleLogin } from "react-google-login";
 import Icon from "./icon";
 import { useHistory } from "react-router-dom";
 import { signup, signin } from "../../actions/auth";
+import { notify } from "../../util/notify";
 
 const initialState = {
   firstName: "",
@@ -53,13 +54,16 @@ const Auth = () => {
 
     try {
       dispatch({ type: "AUTH", data: { result, token } });
+      notify("Successfully Logged In With Google", "success");
       history.push("/");
     } catch (error) {
+      notify("Google Log In Failed", "error");
       console.log(error);
     }
   };
-  const googleFailure = () => {
-    console.log("Log In Failed");
+  const googleFailure = (response) => {
+    notify("Google Log In Failed", "error");
+    console.log(response);
   };
 
   const handleShowPassword = () => {
@@ -135,6 +139,7 @@ const Auth = () => {
             </Button>
             <GoogleLogin
               clientId="245675464152-8u81n5iqnpt105hljs8f1ve0tebul01o.apps.googleusercontent.com"
+              // clientId="245675464152-59qtnetouaipl776ktc8211if2fe2bfl.apps.googleusercontent.com"
               render={(renderProps) => (
                 <Button
                   onClick={renderProps.onClick}

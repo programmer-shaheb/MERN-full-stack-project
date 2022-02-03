@@ -17,6 +17,7 @@ import { deletePost, likePost } from "../../../actions/posts";
 import useStyles from "./Style";
 import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
 import { useHistory } from "react-router-dom";
+import { notify } from "../../../util/notify";
 
 const Post = ({ post, setCurrentID }) => {
   const dispatch = useDispatch();
@@ -33,8 +34,10 @@ const Post = ({ post, setCurrentID }) => {
 
     if (hasLikePost) {
       setLikes(post.likes.filter((id) => id !== userId));
+      notify("You Dislike The Post", "error");
     } else {
       setLikes([...post.likes, userId]);
+      notify("You Like The Post", "success");
     }
   };
 

@@ -12,6 +12,7 @@ import {
 } from "../constants/actionTypes";
 
 import * as api from "../api/index.js";
+import { notify } from "../util/notify";
 
 export const getPost = (id) => async (dispatch) => {
   try {
@@ -32,7 +33,7 @@ export const getPosts = (page) => async (dispatch) => {
     const {
       data: { data, currentPage, numberOfPages },
     } = await api.fetchPosts(page);
-    console.log(data);
+
     dispatch({
       type: FETCH_ALL,
       payload: { data, currentPage, numberOfPages },
@@ -63,8 +64,10 @@ export const createPost = (post, history) => async (dispatch) => {
     const { data } = await api.createPost(post);
 
     dispatch({ type: CREATE, payload: data });
+    notify("New Post Created", "success");
     history.push(`/posts/${data._id}`);
   } catch (error) {
+    notify("Failed To Creating The Post", "error");
     console.log(error.message);
   }
 };
@@ -74,17 +77,24 @@ export const updatePost = (id, post) => async (dispatch) => {
     const { data } = await api.updatePost(id, post);
 
     dispatch({ type: UPDATE, payload: data });
+    notify("Successfully Update The Post", "success");
   } catch (error) {
+    notify("Failed To Updating The Post", "error");
     console.log(error);
   }
 };
 
 export const deletePost = (id) => async (dispatch) => {
   try {
-    await api.deletePost(id);
+    const result = await api.deletePost(id);
+
+    if (result.status === 200) {
+      notify("Post Deleted", "success");
+    }
+
     dispatch({ type: DELETE, payload: id });
   } catch (error) {
-    console.log(error);
+    notify("Request Failed To Delete This Post", "error");
   }
 };
 

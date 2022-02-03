@@ -11,6 +11,7 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import useStyles from "./Style";
 import decode from "jwt-decode";
+import { notify } from "../../util/notify";
 
 const Navbar = () => {
   const classes = useStyles();
@@ -20,6 +21,7 @@ const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
   const logOut = useCallback(() => {
+    notify("Logging Out", "success");
     dispatch({ type: "LOGOUT" });
     history.push("/");
     setUser(null);
