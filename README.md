@@ -30,9 +30,10 @@
   <h3 align="center">Online Photo Exhibition Web App</h3>
 
   <p align="center">
-    
+    This is a Full Stack MERN Project!
     <br />
     <a href="https://online-photo-exhibition.netlify.app/"><strong>View Demo »</strong></a>
+    <br />
     <br />
   </p>
 </div>
