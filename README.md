@@ -30,7 +30,7 @@
   <h3 align="center">Online Photo Exhibition Web App</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    
     <br />
     <a href="https://online-photo-exhibition.netlify.app/"><strong>View Demo »</strong></a>
     <br />
