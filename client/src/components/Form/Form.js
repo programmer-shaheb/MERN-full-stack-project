@@ -2,10 +2,11 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Button, Typography, Paper, TextField } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./Style";
-import FileBase from "react-file-base64";
+import { Base64 } from "js-base64";
 import { createPost, updatePost } from "../../actions/posts";
 import ChipInput from "material-ui-chip-input";
 import { useHistory } from "react-router-dom";
+import { notify } from "../../util/notify";
 
 const Form = ({ currentID, setCurrentID }) => {
   const [postData, setPostData] = useState({
@@ -14,6 +15,8 @@ const Form = ({ currentID, setCurrentID }) => {
     tags: "",
     selectedFile: "",
   });
+  const [imageData, setImageData] = useState("");
+  const [fileError, setFileError] = useState("");
   const classes = useStyles();
   const post = useSelector((state) =>
     currentID ? state.posts?.posts?.find((p) => p._id === currentID) : null
@@ -43,11 +46,20 @@ const Form = ({ currentID, setCurrentID }) => {
     e.preventDefault();
 
     if (currentID === 0) {
-      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      dispatch(
+        createPost(
+          { ...postData, selectedFile: imageData, name: user?.result?.name },
+          history
+        )
+      );
       clear();
     } else {
       dispatch(
-        updatePost(currentID, { ...postData, name: user?.result?.name })
+        updatePost(currentID, {
+          ...postData,
+          selectedFile: imageData,
+          name: user?.result?.name,
+        })
       );
       clear();
     }
@@ -72,6 +84,26 @@ const Form = ({ currentID, setCurrentID }) => {
       ...postData,
       tags: postData.tags.filter((tag) => tag !== chipToDelete),
     });
+  };
+
+  const handleFileUpload = (e) => {
+    if (!e.target.files) {
+      return;
+    }
+    const file = e.target.files[0];
+
+    if (file && file.size > 1024 * 1024) {
+      notify("File size should be less than 1MB", "error");
+      e.target.value = null;
+      return;
+    } else {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageData(reader.result);
+        notify("Image Uploaded Successfully", "success");
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -117,13 +149,10 @@ const Form = ({ currentID, setCurrentID }) => {
           />
         </div>
         <div className={classes.fileInput}>
-          <FileBase
-            type="file"
-            multiple={false}
-            onDone={({ base64 }) =>
-              setPostData({ ...postData, selectedFile: base64 })
-            }
-          />
+          <Button component="label" variant="outlined">
+            Upload Photo{" "}
+            <input type="file" accept="image/*" onChange={handleFileUpload} />
+          </Button>
         </div>
         <Button
           className={classes.buttonSubmit}

@@ -70,10 +70,6 @@ const PostDetails = () => {
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
           <Typography variant="body1">
-            <strong>Realtime Chat - coming soon!</strong>
-          </Typography>
-          <Divider style={{ margin: "20px 0" }} />
-          <Typography variant="body1">
             <CommentSection post={post} />
           </Typography>
           <Divider style={{ margin: "20px 0" }} />

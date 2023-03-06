@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { Container, LinearProgress } from "@material-ui/core";
 import Navbar from "./components/Navbar/Navbar";
+import Auth from "./components/Auth/Auth";
 
 import {
   BrowserRouter as Router,
@@ -11,7 +12,6 @@ import {
 
 const Home = lazy(() => import("./components/Home/Home"));
 const PostDetails = lazy(() => import("./components/PostDetails/PostDetails"));
-const Auth = lazy(() => import("./components/Auth/Auth"));
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("profile"));

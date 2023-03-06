@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://calm-sands-05869.herokuapp.com" });
+const API = axios.create({
+  baseURL: "https://photo-exhibition-server.vercel.app",
+});
 // const API = axios.create({ baseURL: "http://localhost:5000" });
 
 API.interceptors.request.use((req) => {
